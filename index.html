@@ -444,7 +444,7 @@
                     <div class="relative max-w-sm w-full">
                         <div class="absolute -inset-3 bg-beach-card rounded-2xl rotate-3 shadow-md border border-beach-charcoal/5"></div>
                         <!-- Usamos la intensa y expresiva foto _MG_9121-2.jpg como retrato del fotógrafo -->
-                        <img src="src/assets/images/_MG_9121-2.jpg" 
+                        <img src="src/assets/images/_MG_9111-2.jpg" 
                              class="film-photo relative z-10 rounded-xl shadow-lg w-full object-cover aspect-[3/4]" 
                              alt="Fotógrafo en Búzios"
                              onerror="this.src='https://placehold.co/400x500/cbd5e1/1e293b?text=Photographer'" />
@@ -454,9 +454,14 @@
                     </div>
                 </div>
 
+                
+
                 <!-- Bio Surfer / Skate Lifestyle -->
-                <div class="w-full md:w-1/2">
-                    <span class="text-beach-rust font-serif italic text-lg block mb-2">
+                <div class="bio-section w-full md:w-1/2 rounded-xl" >
+
+                    <div class="overlay "></div>
+                    <div class="content">
+<span class="text-beach-rust font-serif italic text-lg block mb-2">
                         {{ t('bio_subtitle') }}
                     </span>
                     <h2 class="font-syne text-3xl md:text-4xl font-extrabold uppercase tracking-tight mb-6 text-beach-charcoal">
@@ -469,8 +474,15 @@
                         {{ t('bio_p2') }}
                     </p>
 
+                    </div>
+
+
+
+
+                    
+
                     <!-- Estadísticas Rápidas -->
-                    <div class="flex items-center gap-6 py-4 border-t border-b border-beach-charcoal/10">
+                    <div class="flex items-center gap-6 py-4 border-t border-b border-beach-charcoal/10 relative z-30">
                         <div class="flex flex-col">
                             <span class="font-syne font-extrabold text-beach-charcoal text-lg">500+</span>
                             <span class="text-[9px] text-beach-charcoal/50 uppercase tracking-widest">
@@ -555,6 +567,30 @@
         </div>
 
     </div>
+
+<style>
+    .bio-section{
+    position: relative;
+    padding: 80px 20px;
+
+    background-image: url("src/assets/images/_MG_0722.jpg");
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+}
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background: rgba(245,242,238,.70);
+    backdrop-filter: blur(2px);
+}
+
+.content{
+    position: relative;
+    z-index: 2;
+}
+</style>
 
     <!-- LÓGICA DE VUE 3 -->
     <script>
@@ -722,5 +758,6 @@
             }
         }).mount('#app');
     </script>
+
 </body>
 </html>

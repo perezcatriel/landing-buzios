@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búzios Lifestyle & Surf Photography | Ensayos de Autor</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Syne (Bold, energetic) & Plus Jakarta Sans (Clean, organic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&family=Playfair+Display:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        syne: ['"Syne"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        beach: {
+                            sand: '#F3EFEA',       // Fondo papel/arena vintage
+                            charcoal: '#1E1E1C',   // Negro orgánico mate
+                            rust: '#C97A63',       // Terracota / Óxido de atardecer
+                            sea: '#4A6B6C',        // Azul mar tormentoso desaturado
+                            card: '#FAF8F5'        // Blanco hueso para contenedores
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Capa de Grano Analógico real por encima de toda la web */
+        .analog-grain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.055'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Procesamiento vintage unificado para tus fotos */
+        .film-photo {
+            filter: saturate(0.85) contrast(1.03) sepia(0.08) brightness(0.95);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .film-photo:hover {
+            filter: saturate(1.02) contrast(1) sepia(0) brightness(1);
+        }
+
+        /* Ocultar elementos Vue antes de compilar */
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-beach-sand text-beach-charcoal selection:bg-beach-rust selection:text-white antialiased">
+
+    <!-- Capa de Grano -->
+    <div class="analog-grain"></div>
+
+    <div id="app" v-cloak>
+        
+        <!-- HEADER / NAVEGACIÓN -->
+        <header class="sticky top-0 z-50 bg-beach-sand/95 backdrop-blur-md border-b border-beach-charcoal/5 px-4 md:px-8 py-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <!-- Logo tipo fanzine indie -->
+                <a href="#" class="flex flex-col">
+                    <span class="font-syne text-xl md:text-2xl font-extrabold tracking-tight uppercase leading-none">CATRIEL PEREZ</span>
+                    <span class="font-serif italic text-xs text-beach-rust tracking-wider mt-1">Lifestyle Photography</span>
+                </a>
+
+                <!-- Controles: Idioma y Botón de Acción -->
+                <div class="flex items-center gap-4">
+                    <!-- Selector de Idioma Reactivo -->
+                    <div class="bg-beach-charcoal/5 p-1 rounded-full flex items-center gap-1">
+                        <button @click="setLang('es')" 
+                                :class="lang === 'es' ? 'bg-beach-rust text-white font-bold' : 'text-beach-charcoal/60'"
+                                class="px-2.5 py-1 text-[10px] md:text-xs rounded-full transition-all duration-300">
+                            ES
+                        </button>
+                        <button @click="setLang('pt')" 
+                                :class="lang === 'pt' ? 'bg-beach-rust text-white font-bold' : 'text-beach-charcoal/60'"
+                                class="px-2.5 py-1 text-[10px] md:text-xs rounded-full transition-all duration-300">
+                            PT
+                        </button>
+                    </div>
+
+                    <!-- CTA Principal -->
+                    <a href="#booking-builder" class="hidden sm:inline-flex bg-beach-charcoal text-white hover:bg-beach-rust px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300">
+                        {{ t('nav_cta') }}
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- HERO SECTION (Usando _MG_0524.jpg como portada cinemática) -->
+        <section class="relative min-h-[92vh] flex items-center justify-center px-4 overflow-hidden py-16">
+            <!-- Imagen de fondo con tu foto real de atardecer de surf -->
+            <div class="absolute inset-0 z-0">
+                <img src="src/assets/images/_MG_0524.jpg" 
+                     alt="Atardecer surfer en Búzios" 
+                     class="w-full h-full object-cover object-center scale-105"
+                     onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80'" />
+                <div class="absolute inset-0 bg-gradient-to-t from-beach-sand via-beach-sand/40 to-beach-charcoal/45 z-10"></div>
+            </div>
+
+            <div class="max-w-4xl mx-auto text-center relative z-20 mt-6">
+                <!-- Tag estilo adhesivo vintage -->
+                <span class="inline-block bg-beach-rust/25 border border-beach-rust/40 text-beach-charcoal font-bold px-4 py-1.5 rounded-full text-xs uppercase tracking-widest mb-6 backdrop-blur-sm">
+                    ⚡ BÚZIOS, BRASIL
+                </span>
+
+                <h1 class="font-syne text-4xl sm:text-6xl md:text-8xl font-extrabold tracking-tight uppercase leading-none text-beach-charcoal mb-6 drop-shadow-sm">
+                    {{ t('hero_title') }}
+                </h1>
+
+                <p class="text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 text-beach-charcoal/90 leading-relaxed font-medium">
+                    {{ t('hero_desc') }}
+                </p>
+
+                <!-- CTAs Directos optimizados para Ads -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+                    <a href="#booking-builder" class="w-full bg-beach-rust hover:bg-beach-charcoal text-white px-8 py-4 rounded-full font-bold uppercase text-xs tracking-widest transition-all duration-300 shadow-lg shadow-beach-rust/20 transform hover:-translate-y-0.5 text-center">
+                        {{ t('hero_cta_build') }} <i class="fa-solid fa-sliders ml-2"></i>
+                    </a>
+                    <a :href="waDirectUrl" target="_blank" class="w-full bg-white/90 backdrop-blur-sm border border-beach-charcoal text-beach-charcoal hover:bg-beach-charcoal hover:text-white px-8 py-4 rounded-full font-bold uppercase text-xs tracking-widest transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> {{ t('hero_cta_wa') }}
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN MANIFIESTO (Usando _MG_9053.jpg para presentar la vibra espontánea) -->
+        <section class="py-24 px-4 bg-beach-card border-t border-b border-beach-charcoal/5">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Texto de Manifiesto Surfer / Descontracturado -->
+                <div class="lg:col-span-7 space-y-6">
+                    <span class="text-beach-rust font-serif italic text-lg block">{{ t('concept_subtitle') }}</span>
+                    <h2 class="font-syne text-3xl md:text-5xl font-extrabold uppercase tracking-tight text-beach-charcoal">
+                        {{ t('concept_title') }}
+                    </h2>
+                    <div class="w-16 h-1 bg-beach-rust rounded-full"></div>
+                    
+                    <p class="text-beach-charcoal/80 text-base leading-relaxed font-light">
+                        {{ t('concept_p1') }}
+                    </p>
+                    <p class="text-beach-charcoal/80 text-base leading-relaxed font-light">
+                        {{ t('concept_p2') }}
+                    </p>
+
+                    <!-- Beneficios Clave -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6">
+                        <div class="flex items-start gap-3">
+                            <span class="text-beach-rust text-xl"><i class="fa-solid fa-bolt"></i></span>
+                            <div>
+                                <h4 class="font-bold text-sm uppercase text-beach-charcoal">{{ t('usp_1_title') }}</h4>
+                                <p class="text-xs text-beach-charcoal/70 mt-1">{{ t('usp_1_desc') }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-beach-rust text-xl"><i class="fa-solid fa-camera-retro"></i></span>
+                            <div>
+                                <h4 class="font-bold text-sm uppercase text-beach-charcoal">{{ t('usp_2_title') }}</h4>
+                                <p class="text-xs text-beach-charcoal/70 mt-1">{{ t('usp_2_desc') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagen Destacada del Manifiesto (_MG_9053.jpg) -->
+                <div class="lg:col-span-5 relative">
+                    <div class="absolute -inset-2 bg-beach-sand rounded-3xl rotate-2 shadow-sm border border-beach-charcoal/5"></div>
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-xl aspect-[3/4] bg-neutral-200">
+                        <img src="_MG_9053.jpg" 
+                             alt="Ensayo fotográfico lifestyle Búzios" 
+                             class="film-photo w-full h-full object-cover"
+                             onerror="this.src='https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80'" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO / LA GALERÍA DE AUTOR -->
+        <section class="py-24 px-4 bg-beach-sand">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="text-beach-rust font-serif italic text-lg block mb-2">Portfolio</span>
+                    <h2 class="font-syne text-3xl md:text-6xl font-extrabold uppercase tracking-tight text-beach-charcoal">
+                        {{ t('gallery_title') }}
+                    </h2>
+                    <p class="text-beach-charcoal/70 text-sm max-w-lg mx-auto mt-4">
+                        {{ t('gallery_desc') }}
+                    </p>
+                </div>
+
+                <!-- Grid Orgánica de Fotos Reales -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Foto 1: Acción Surf (_MG_0221.jpg) -->
+                    <div class="bg-beach-card rounded-2xl p-4 border border-beach-charcoal/5 shadow-md flex flex-col justify-between">
+                        <div class="rounded-xl overflow-hidden aspect-[3/4] bg-neutral-100">
+                            <img src="_MG_0221.jpg" 
+                                 class="film-photo w-full h-full object-cover" 
+                                 alt="Surf Geribá"
+                                 onerror="this.src='https://placehold.co/600x800/d6cfc4/22211f?text=Geriba+Surf'">
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-xs">
+                            <span class="font-serif italic text-beach-charcoal/60">Praia de Geribá</span>
+                            <span class="font-bold uppercase tracking-wider text-beach-rust bg-beach-rust/10 px-2 py-0.5 rounded text-[10px]">Surf Culture</span>
+                        </div>
+                    </div>
+
+                    <!-- Foto 2: Chica pelo rizado de espaldas (_MG_9036.jpg) -->
+                    <div class="bg-beach-card rounded-2xl p-4 border border-beach-charcoal/5 shadow-md flex flex-col justify-between">
+                        <div class="rounded-xl overflow-hidden aspect-[3/4] bg-neutral-100">
+                            <img src="_MG_9036.jpg" 
+                                 class="film-photo w-full h-full object-cover" 
+                                 alt="Curly hair wind back"
+                                 onerror="this.src='https://placehold.co/600x800/d6cfc4/22211f?text=Tucuns+Breeze'">
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-xs">
+                            <span class="font-serif italic text-beach-charcoal/60">Praia de Tucuns</span>
+                            <span class="font-bold uppercase tracking-wider text-beach-rust bg-beach-rust/10 px-2 py-0.5 rounded text-[10px]">Lifestyle Detail</span>
+                        </div>
+                    </div>
+
+                    <!-- Foto 3: Tarjeta Estilo Polaroid Real (_MG_9061.jpg de fondo) -->
+                    <div class="bg-beach-card rounded-2xl p-6 border-2 border-dashed border-beach-rust/30 shadow-md flex flex-col justify-between items-center text-center">
+                        <div class="bg-white p-3 shadow-lg rounded-sm transform rotate-2 max-w-[210px] mx-auto border border-neutral-200">
+                            <div class="aspect-square overflow-hidden bg-neutral-100">
+                                <img src="_MG_9061.jpg" 
+                                     class="w-full h-full object-cover grayscale brightness-95" 
+                                     alt="Polaroid instantánea"
+                                     onerror="this.src='https://placehold.co/400x400/d6cfc4/22211f?text=Polaroid'">
+                            </div>
+                            <div class="pt-3 font-serif text-[10px] tracking-widest text-beach-charcoal/60 uppercase">
+                                Polaroid Búzios '26
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <h4 class="font-syne font-extrabold text-beach-rust text-base uppercase leading-none">
+                                {{ t('polaroid_gift') }}
+                            </h4>
+                            <p class="text-xs text-beach-charcoal/70 mt-2">
+                                {{ t('polaroid_gift_desc') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Foto 4: Plano Detalle Crochet y Tatuaje (03-06-2025--IMG_9659.jpg) -->
+                    <div class="bg-beach-card rounded-2xl p-4 border border-beach-charcoal/5 shadow-md flex flex-col justify-between">
+                        <div class="rounded-xl overflow-hidden aspect-[3/4] bg-neutral-100">
+                            <img src="03-06-2025--IMG_9659.jpg" 
+                                 class="film-photo w-full h-full object-cover" 
+                                 alt="Look Playero Crochet"
+                                 onerror="this.src='https://placehold.co/600x800/d6cfc4/22211f?text=Details'">
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-xs">
+                            <span class="font-serif italic text-beach-charcoal/60">Praia de João Fernandes</span>
+                            <span class="font-bold uppercase tracking-wider text-beach-rust bg-beach-rust/10 px-2 py-0.5 rounded text-[10px]">Boho Textures</span>
+                        </div>
+                    </div>
+
+                    <!-- Foto 5: Bodyboarder Atardecer (_MG_0603-2.jpg) -->
+                    <div class="bg-beach-card rounded-2xl p-4 border border-beach-charcoal/5 shadow-md flex flex-col justify-between">
+                        <div class="rounded-xl overflow-hidden aspect-[3/4] bg-neutral-100">
+                            <img src="_MG_0603-2.jpg" 
+                                 class="film-photo w-full h-full object-cover" 
+                                 alt="Bodyboarder Sunset Walk"
+                                 onerror="this.src='https://placehold.co/600x800/d6cfc4/22211f?text=Manguinhos'">
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-xs">
+                            <span class="font-serif italic text-beach-charcoal/60">Praia de Manguinhos</span>
+                            <span class="font-bold uppercase tracking-wider text-beach-rust bg-beach-rust/10 px-2 py-0.5 rounded text-[10px]">Golden Walk</span>
+                        </div>
+                    </div>
+
+                    <!-- Foto 6: Detalle del Pelo y Traje de Baño (_MG_9055.jpg) -->
+                    <div class="bg-beach-card rounded-2xl p-4 border border-beach-charcoal/5 shadow-md flex flex-col justify-between">
+                        <div class="rounded-xl overflow-hidden aspect-[3/4] bg-neutral-100">
+                            <img src="_MG_9055.jpg" 
+                                 class="film-photo w-full h-full object-cover" 
+                                 alt="Bikini detail"
+                                 onerror="this.src='https://placehold.co/600x800/d6cfc4/22211f?text=CloseUp'">
+                        </div>
+                        <div class="mt-4 flex items-center justify-between text-xs">
+                            <span class="font-serif italic text-beach-charcoal/60">Praia Brava</span>
+                            <span class="font-bold uppercase tracking-wider text-beach-rust bg-beach-rust/10 px-2 py-0.5 rounded text-[10px]">Aesthetic Detail</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE EXPERIENCE BUILDER (Configurador interactivo de Sesión) -->
+        <section id="booking-builder" class="py-24 bg-beach-charcoal text-beach-sand px-4 relative">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <span class="text-beach-rust font-serif italic text-lg block mb-2">{{ t('builder_subtitle') }}</span>
+                    <h2 class="font-syne text-3xl md:text-5xl font-extrabold uppercase tracking-tight text-white">
+                        {{ t('builder_title') }}
+                    </h2>
+                    <p class="text-beach-sand/70 mt-4 text-sm max-w-lg mx-auto">
+                        {{ t('builder_desc') }}
+                    </p>
+                </div>
+
+                <!-- Panel del Configurador Reactivo en Vue 3 -->
+                <div class="bg-black/35 backdrop-blur-md rounded-3xl p-6 md:p-10 border border-white/5 shadow-2xl">
+                    
+                    <!-- Paso 1: Estilo / Vibe de la sesión -->
+                    <div class="mb-8">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-beach-rust mb-4">
+                            {{ t('step_1') }}
+                        </label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <button @click="builder.vibe = 'lifestyle'" 
+                                    :class="builder.vibe === 'lifestyle' ? 'ring-2 ring-beach-rust bg-white/10 border-beach-rust text-white' : 'bg-white/5 border-white/10 text-beach-sand/70'"
+                                    class="p-4 rounded-xl border hover:border-beach-rust/50 hover:bg-white/10 text-left transition-all duration-300">
+                                <span class="text-lg block mb-2">🐚</span>
+                                <span class="font-syne text-xs font-extrabold block uppercase">Lifestyle</span>
+                                <span class="text-[9px] text-beach-sand/40 block mt-1">{{ t('vibe_lifestyle') }}</span>
+                            </button>
+                            
+                            <button @click="builder.vibe = 'vintage film'" 
+                                    :class="builder.vibe === 'vintage film' ? 'ring-2 ring-beach-rust bg-white/10 border-beach-rust text-white' : 'bg-white/5 border-white/10 text-beach-sand/70'"
+                                    class="p-4 rounded-xl border hover:border-beach-rust/50 hover:bg-white/10 text-left transition-all duration-300">
+                                <span class="text-lg block mb-2">🎞️</span>
+                                <span class="font-syne text-xs font-extrabold block uppercase">Retro Film</span>
+                                <span class="text-[9px] text-beach-sand/40 block mt-1">{{ t('vibe_vintage') }}</span>
+                            </button>
+                            
+                            <button @click="builder.vibe = 'skater surf'" 
+                                    :class="builder.vibe === 'skater surf' ? 'ring-2 ring-beach-rust bg-white/10 border-beach-rust text-white' : 'bg-white/5 border-white/10 text-beach-sand/70'"
+                                    class="p-4 rounded-xl border hover:border-beach-rust/50 hover:bg-white/10 text-left transition-all duration-300">
+                                <span class="text-lg block mb-2">🛹</span>
+                                <span class="font-syne text-xs font-extrabold block uppercase">Surf/Skate</span>
+                                <span class="text-[9px] text-beach-sand/40 block mt-1">{{ t('vibe_surf') }}</span>
+                            </button>
+                            
+                            <button @click="builder.vibe = 'editorial'" 
+                                    :class="builder.vibe === 'editorial' ? 'ring-2 ring-beach-rust bg-white/10 border-beach-rust text-white' : 'bg-white/5 border-white/10 text-beach-sand/70'"
+                                    class="p-4 rounded-xl border hover:border-beach-rust/50 hover:bg-white/10 text-left transition-all duration-300">
+                                <span class="text-lg block mb-2">🕶️</span>
+                                <span class="font-syne text-xs font-extrabold block uppercase">Editorial</span>
+                                <span class="text-[9px] text-beach-sand/40 block mt-1">{{ t('vibe_editorial') }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Paso 2: Locación -->
+                    <div class="mb-8">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-beach-rust mb-4">
+                            {{ t('step_2') }}
+                        </label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <button @click="builder.location = 'Geribá'" 
+                                    :class="builder.location === 'Geribá' ? 'ring-2 ring-beach-rust bg-white/10 border-beach-rust text-white' : 'bg-white/5 border-white/10 text-beach-sand/70'"
+                                    class="p-4 rounded-xl border hover:border-beach-rust/50 hover:bg-white/10 text-left transition-all duration-300">
+                                <span class="font-syne text-sm font-extrabold block uppercase">Praia de Geribá</span>
+                                <span class="text-[10px] text-beach-sand/40 block mt-1">{{ t('playa_geriba') }}</span>
+                            </button>
+                            
+                            <button @click="builder.location = 'Manguinhos'" 
+                                    :class="builder.location === 'Manguinhos' ? 'ring-2 ring-beach-rust bg-white/10 border-beach-rust text-white' : 'bg-white/5 border-white/10 text-beach-sand/70'"
+                                    class="p-4 rounded-xl border hover:border-beach-rust/50 hover:bg-white/10 text-left transition-all duration-300">
+                                <span class="font-syne text-sm font-extrabold block uppercase">Praia de Manguinhos</span>
+                                <span class="text-[10px] text-beach-sand/40 block mt-1">{{ t('playa_manguinhos') }}</span>
+                            </button>
+                            
+                            <button @click="builder.location = 'Brava / João Fernandes'" 
+                                    :class="builder.location === 'Brava / João Fernandes' ? 'ring-2 ring-beach-rust bg-white/10 border-beach-rust text-white' : 'bg-white/5 border-white/10 text-beach-sand/70'"
+                                    class="p-4 rounded-xl border hover:border-beach-rust/50 hover:bg-white/10 text-left transition-all duration-300">
+                                <span class="font-syne text-sm font-extrabold block uppercase">Brava & João Fernandes</span>
+                                <span class="text-[10px] text-beach-sand/40 block mt-1">{{ t('playa_brava') }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Cuadro resumen de inclusión express -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <div class="text-center sm:text-left">
+                            <h4 class="font-serif text-lg text-white mb-2 italic">
+                                {{ t('included_title') }}
+                            </h4>
+                            <ul class="text-xs text-beach-sand/70 space-y-2 inline-block text-left">
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-check text-beach-rust"></i>
+                                    <span>{{ t('incl_1') }}</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-check text-beach-rust"></i>
+                                    <span>{{ t('incl_2') }}</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-check text-beach-rust"></i>
+                                    <span>{{ t('incl_3') }}</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <i class="fa-solid fa-check text-beach-rust"></i>
+                                    <span class="text-white font-bold">{{ t('incl_4') }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- badge de velocidad express -->
+                        <div class="flex flex-col items-center bg-beach-rust/10 border border-beach-rust/30 px-6 py-4 rounded-2xl w-full sm:w-auto">
+                            <span class="text-[9px] uppercase tracking-widest text-beach-rust font-bold mb-1">
+                                {{ t('delivery_badge') }}
+                            </span>
+                            <span class="text-xl font-syne font-extrabold text-white mb-0.5">&lt; 24 HORAS</span>
+                            <span class="text-[9px] text-beach-sand/40 uppercase font-medium">Download Digital Express</span>
+                        </div>
+                    </div>
+
+                    <!-- Enlace directo con texto dinámico al WA -->
+                    <a :href="waBuilderUrl" 
+                       target="_blank"
+                       class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-4 px-8 rounded-full font-bold uppercase text-xs tracking-widest transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-emerald-950/20 transform hover:-translate-y-0.5">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>{{ t('builder_cta') }}</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- BIOGRAFÍA DEL FOTÓGRAFO (Usando tus retratos blanco y negro _MG_0720-2.jpg y _MG_9121-2.jpg) -->
+        <section class="py-24 px-4 bg-beach-sand">
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                
+                <!-- Retrato B&W en marco rústico -->
+                <div class="w-full md:w-1/2 flex justify-center">
+                    <div class="relative max-w-sm w-full">
+                        <div class="absolute -inset-3 bg-beach-card rounded-2xl rotate-3 shadow-md border border-beach-charcoal/5"></div>
+                        <!-- Usamos la intensa y expresiva foto _MG_9121-2.jpg como retrato del fotógrafo -->
+                        <img src="_MG_9121-2.jpg" 
+                             class="film-photo relative z-10 rounded-xl shadow-lg w-full object-cover aspect-[3/4]" 
+                             alt="Fotógrafo en Búzios"
+                             onerror="this.src='https://placehold.co/400x500/cbd5e1/1e293b?text=Photographer'" />
+                        <div class="absolute bottom-4 left-4 z-20 bg-beach-rust/90 backdrop-blur-md px-4 py-1.5 rounded-lg text-[10px] font-syne font-extrabold uppercase tracking-widest text-white shadow-md">
+                            ⚓ Surf & Film Búzios
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio Surfer / Skate Lifestyle -->
+                <div class="w-full md:w-1/2">
+                    <span class="text-beach-rust font-serif italic text-lg block mb-2">
+                        {{ t('bio_subtitle') }}
+                    </span>
+                    <h2 class="font-syne text-3xl md:text-4xl font-extrabold uppercase tracking-tight mb-6 text-beach-charcoal">
+                        {{ t('bio_title') }}
+                    </h2>
+                    <p class="text-beach-charcoal/75 text-sm mb-6 leading-relaxed font-light">
+                        {{ t('bio_p1') }}
+                    </p>
+                    <p class="text-beach-charcoal/75 text-sm mb-6 leading-relaxed font-light">
+                        {{ t('bio_p2') }}
+                    </p>
+
+                    <!-- Estadísticas Rápidas -->
+                    <div class="flex items-center gap-6 py-4 border-t border-b border-beach-charcoal/10">
+                        <div class="flex flex-col">
+                            <span class="font-syne font-extrabold text-beach-charcoal text-lg">500+</span>
+                            <span class="text-[9px] text-beach-charcoal/50 uppercase tracking-widest">
+                                {{ t('stat_sessions') }}
+                            </span>
+                        </div>
+                        <div class="w-px h-8 bg-beach-charcoal/10"></div>
+                        <div class="flex flex-col">
+                            <span class="font-syne font-extrabold text-beach-charcoal text-lg">100%</span>
+                            <span class="text-[9px] text-beach-charcoal/50 uppercase tracking-widest">
+                                {{ t('stat_natural') }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="bg-beach-charcoal text-beach-sand py-16 px-4 border-t border-white/5">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <!-- Col 1 -->
+                <div>
+                    <span class="font-syne text-xl font-extrabold tracking-tight text-white uppercase">RAW BÚZIOS</span>
+                    <p class="text-[10px] tracking-[0.25em] text-beach-rust uppercase font-medium mt-1 mb-4">Lifestyle & Surf Photography</p>
+                    <p class="text-xs text-beach-sand/70 leading-relaxed">
+                        {{ t('footer_desc') }}
+                    </p>
+                </div>
+
+                <!-- Col 2 -->
+                <div>
+                    <h4 class="font-syne text-sm font-extrabold uppercase text-white tracking-widest mb-4">{{ t('footer_contact_title') }}</h4>
+                    <ul class="text-xs text-beach-sand/70 space-y-3">
+                        <li class="flex items-center gap-3">
+                            <i class="fa-brands fa-whatsapp text-beach-rust text-sm"></i>
+                            <span>{{ photographerNumberFormatted }}</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-regular fa-envelope text-beach-rust text-sm"></i>
+                            <span>raw.buzios@gmail.com</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fa-solid fa-location-dot text-beach-rust text-sm"></i>
+                            <span>Búzios, Rio de Janeiro, Brasil</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Instagram Grid -->
+                <div>
+                    <h4 class="font-syne text-sm font-extrabold uppercase text-white tracking-widest mb-4">Instagram Live</h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <img src="_MG_0221.jpg" class="w-full h-12 object-cover rounded saturate-75 contrast-105 brightness-90" alt="Insta 1">
+                        <img src="_MG_9036.jpg" class="w-full h-12 object-cover rounded saturate-75 contrast-105 brightness-90" alt="Insta 2">
+                        <img src="_MG_9053.jpg" class="w-full h-12 object-cover rounded saturate-75 contrast-105 brightness-90" alt="Insta 3">
+                        <img src="_MG_9121-2.jpg" class="w-full h-12 object-cover rounded saturate-75 contrast-105 brightness-90" alt="Insta 4">
+                        <img src="_MG_0603-2.jpg" class="w-full h-12 object-cover rounded saturate-75 contrast-105 brightness-90" alt="Insta 5">
+                        <div class="w-full h-12 bg-white/5 rounded flex items-center justify-center text-[9px] text-beach-rust font-bold">
+                            @raw.buzios
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-beach-sand/40">
+                <p>&copy; 2026 Raw Búzios. {{ t('rights') }}</p>
+                <p>{{ t('designed_by') }}</p>
+            </div>
+        </footer>
+
+        <!-- BARRA CTA FIJA EN MÓVILES (Para máxima conversión en Instagram Ads) -->
+        <div class="fixed bottom-0 left-0 right-0 z-40 bg-beach-card/95 backdrop-blur-md border-t border-beach-charcoal/10 px-4 py-3 flex sm:hidden items-center justify-between shadow-2xl">
+            <div class="flex flex-col">
+                <span class="font-syne font-extrabold text-xs text-beach-charcoal leading-none">RAW BÚZIOS</span>
+                <span class="text-[9px] text-beach-rust font-bold mt-1">{{ t('badge_express') }}</span>
+            </div>
+            <a href="#booking-builder" class="bg-beach-rust text-white px-5 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-wider shadow-md">
+                {{ t('mobile_cta') }} <i class="fa-solid fa-chevron-right ml-1"></i>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- LÓGICA DE VUE 3 -->
+    <script>
+        const { createApp, ref, computed, reactive } = Vue;
+
+        createApp({
+            setup() {
+                // Idioma Activo (ES/PT para captar los dos tráficos principales de Búzios)
+                const lang = ref('es');
+                
+                // Configura tu número de WhatsApp real acá
+                const photographerWhatsAppNumber = '5522999999999'; 
+                const photographerNumberFormatted = '+55 (22) 99999-9999';
+
+                // Estado reactivo del creador de ensayos
+                const builder = reactive({
+                    vibe: 'lifestyle',
+                    location: 'Geribá'
+                });
+
+                // Diccionario de traducción dinámico sin recargar la página
+                const dictionary = {
+                    es: {
+                        nav_cta: 'Reservar Ensayo',
+                        hero_title: 'Tu esencia libre retratada en el paraíso',
+                        hero_desc: 'Ensayos fotográficos con estilo retro analógico, grano vintage y vibra de playa. Sin poses forzadas ni falsedades. Solo vos y el mar de Búzios.',
+                        hero_cta_build: 'Armar mi Ensayo ideal',
+                        hero_cta_wa: 'Preguntar por WhatsApp',
+                        concept_subtitle: 'El Concepto',
+                        concept_title: 'Fotografía con alma, viento y sal',
+                        concept_p1: 'Inspirado en la cultura skater, surfer y el estilo de vida playero descontracturado. No me interesan los books de fotos artificiales ni las luces de estudio incómodas. Salimos a caminar con la cámara, charlamos de música y dejamos que la luz natural haga su trabajo.',
+                        concept_p2: 'Te ayudo a elegir la playa ideal según el viento de Búzios, te guío suavemente en las poses y te entrego un recuerdo con la calidez del grano analógico real.',
+                        usp_1_title: 'Entrega en < 24hs',
+                        usp_1_desc: 'Ideal para que tengas tu galería web el día después de tu sesión sin esperas largas.',
+                        usp_2_title: 'Polaroid de Regalo',
+                        usp_2_desc: 'Te entrego una copia física revelada en el acto para que te lleves tu recuerdo en el bolsillo.',
+                        gallery_title: 'La textura del atardecer',
+                        gallery_desc: 'Fotos con grano real y colores nostálgicos. Mira cómo lucen mis ensayos espontáneos en las playas de la península.',
+                        polaroid_gift: '¡Polaroid Física de Regalo!',
+                        polaroid_gift_desc: 'Impresa en el momento de la sesión. Un pedacito físico de Búzios para decorar tu rincón favorito.',
+                        builder_subtitle: 'Configurador Inteligente',
+                        builder_title: '¿Cómo te imaginas tu ensayo?',
+                        builder_desc: 'Elige abajo tu estilo y tu locación preferida. Al confirmar, me llegará un WhatsApp directo con tu diseño para reservar.',
+                        step_1: '1. Elige tu Vibe / Estilo de foto',
+                        vibe_lifestyle: 'Natural, paseando',
+                        vibe_vintage: 'Grano y nostalgia',
+                        vibe_surf: 'Estilo surfer / skater',
+                        vibe_editorial: 'Actitud y carácter',
+                        step_2: '2. ¿Dónde hacemos el ensayo?',
+                        playa_geriba: 'Olas, surfistas y arenas eternas',
+                        playa_manguinhos: 'Atardeceres doradísimos de película',
+                        playa_brava: 'Acantilados y verde tropical salvaje',
+                        included_title: 'Tu Sesión Incluye:',
+                        incl_1: '1 hora completa de ensayo libre de poses.',
+                        incl_2: 'Guía de vestuario playero y locaciones.',
+                        incl_3: 'Entrega express de 20 fotos editadas en alta definición.',
+                        incl_4: '¡1 copia de Polaroid impresa física en el acto!',
+                        delivery_badge: 'Entrega express',
+                        builder_cta: 'RESERVAR CON ESTOS DETALLES',
+                        bio_subtitle: 'Detrás de la lente',
+                        bio_title: 'Hola, soy tu fotógrafo en la península',
+                        bio_p1: 'Amo patinar por Orla Bardot, surfear temprano en Geribá y capturar la vida de playa tal como sucede. Creo que un buen ensayo es el que se siente como una tarde compartida con amigos, no como un trabajo. No te preocupes si decís "soy tímida" o "salgo mal en las fotos"; mi trabajo es que te diviertas y te lleves el recuerdo más estético de tus vacaciones.',
+                        bio_p2: '¿Hacemos fotos increíbles?',
+                        stat_sessions: 'Sesiones de fotos reales',
+                        stat_natural: 'Naturalidad garantizada',
+                        footer_desc: 'Capturando la cultura de playa, el surf, y los retratos libres en Armação dos Búzios. Estilo retro analógico con grano real.',
+                        footer_contact_title: 'Contacto',
+                        rights: 'Todos los derechos reservados.',
+                        designed_by: 'Hecho para creadores de recuerdos libres y espontáneos',
+                        badge_express: 'Entrega < 24 horas',
+                        mobile_cta: 'Armar Ensayo'
+                    },
+                    pt: {
+                        nav_cta: 'Reservar Ensaio',
+                        hero_title: 'Sua essência livre retratada no paraíso',
+                        hero_desc: 'Ensaios fotográficos com estilo retrô analógico, grão vintage e vibe de praia. Sem poses forçadas. Apenas você e o mar de Búzios.',
+                        hero_cta_build: 'Montar meu Ensaio ideal',
+                        hero_cta_wa: 'Perguntar por WhatsApp',
+                        concept_subtitle: 'O Conceito',
+                        concept_title: 'Fotografia com alma, vento e sal',
+                        concept_p1: 'Inspirado na cultura skater, surfer e no estilo de vida praiano descontraído. Não me interesso por álbuns de fotos artificiais ou luzes de estúdio frias. Saímos para caminhar com a câmera, conversamos sobre música e deixamos que a luz natural faça o seu trabalho.',
+                        concept_p2: 'Te ajudo a escolher a praia perfeita de acordo com o vento de Búzios, te guio com as poses e te entrego uma recordação com o calor do grão analógico real.',
+                        usp_1_title: 'Entrega em < 24hs',
+                        usp_1_desc: 'Perfeito para você ter sua galeria web no dia seguinte à sua sessão, sem esperas longa.',
+                        usp_2_title: 'Polaroid de Presente',
+                        usp_2_desc: 'Te entrego uma cópia física revelada na hora para você levar no bolso.',
+                        gallery_title: 'A textura do entardecer',
+                        gallery_desc: 'Fotos com grão real e cores nostálgicas. Veja como são meus ensaios espontâneos nas praias da península.',
+                        polaroid_gift: '¡Polaroid Física de Presente!',
+                        polaroid_gift_desc: 'Impressa na hora da sessão. Um pedacinho físico de Búzios para decorar o seu canto favorito.',
+                        builder_subtitle: 'Configurador Inteligente',
+                        builder_title: 'Como você imagina seu ensaio?',
+                        builder_desc: 'Escolha abaixo seu estilo e sua locação preferida. Ao confirmar, receberei um WhatsApp direto com seu design para agendar.',
+                        step_1: '1. Escolha sua Vibe / Estilo de foto',
+                        vibe_lifestyle: 'Natural, passeando',
+                        vibe_vintage: 'Grão e nostalgia',
+                        vibe_surf: 'Estilo surfista / skater',
+                        vibe_editorial: 'Atitude e personalidade',
+                        step_2: '2. Onde faremos o ensaio?',
+                        playa_geriba: 'Ondas, surfistas e areia sem fim',
+                        playa_manguinhos: 'Pôr do sol douradíssimo de cinema',
+                        playa_brava: 'Falésias e verde tropical selvagem',
+                        included_title: 'Sua Sessão Inclui:',
+                        incl_1: '1 hora completa de ensaio livre de poses rígidas.',
+                        incl_2: 'Guia de estilo de praia e locações.',
+                        incl_3: 'Entrega expressa de 20 fotos editadas em alta definição.',
+                        incl_4: '¡1 cópia de Polaroid impressa física na hora!',
+                        delivery_badge: 'Entrega expressa',
+                        builder_cta: 'RESERVAR COM ESSES DETALHES',
+                        bio_subtitle: 'Por trás da lente',
+                        bio_title: 'Olá, sou seu fotógrafo na península',
+                        bio_p1: 'Amo andar de skate pela Orla Bardot, surfar cedo em Geribá e capturar a vida de praia como ela acontece. Acredito que um bom ensaio deve parecer uma tarde compartilhada com amigos. Não se preocupe se disser "sou tímida", meu trabalho é fazer você se divertir e levar a recordação mais linda de suas férias.',
+                        bio_p2: 'Vamos fazer fotos incríveis?',
+                        stat_sessions: 'Ensaios realizados',
+                        stat_natural: 'Naturalidade garantida',
+                        footer_desc: 'Capturando a cultura de praia, o surf, e os retratos livres em Armação dos Búzios. Estilo retrô analógico com grão real.',
+                        footer_contact_title: 'Contato',
+                        rights: 'Todos os direitos reservados.',
+                        designed_by: 'Feito para criadores de memórias livres e espontâneas',
+                        badge_express: 'Entrega em < 24 horas',
+                        mobile_cta: 'Montar Ensaio'
+                    }
+                };
+
+                const t = (key) => {
+                    return dictionary[lang.value][key] || key;
+                };
+
+                const setLang = (selectedLang) => {
+                    lang.value = selectedLang;
+                };
+
+                // URLs dinámicos de WhatsApp para conversión inmediata
+                const waDirectUrl = computed(() => {
+                    const msg = lang.value === 'es' 
+                        ? '¡Hola! Vi tus fotos surfer/vintage de Búzios y me encantó tu estilo con grano analógico. ¿Me contarías más sobre las sesiones de fotos femeninas?' 
+                        : 'Olá! Vi suas fotos surfer/vintage de Búzios e adorei seu estilo analógico. Você poderia me passar mais informações sobre os ensaios femininos?';
+                    return `https://wa.me/${photographerWhatsAppNumber}?text=${encodeURIComponent(msg)}`;
+                });
+
+                const waBuilderUrl = computed(() => {
+                    const vibeFormatted = builder.vibe.toUpperCase();
+                    const locFormatted = builder.location.toUpperCase();
+                    const msg = lang.value === 'es'
+                        ? `¡Hola! Estuve armando mi sesión ideal en tu fanzine web de Búzios 📸\n\n` +
+                          `• Estilo deseado: ${vibeFormatted}\n` +
+                          `• Playa elegida: ${locFormatted}\n\n` +
+                          `¿Tenés fechas disponibles pronto para este tipo de sesión? ¡Muchas gracias!`
+                        : `Olá! Montei meu ensaio ideal no seu site de fotografia de Búzios 📸\n\n` +
+                          `• Estilo preferido: ${vibeFormatted}\n` +
+                          `• Praia escolhida: ${locFormatted}\n\n` +
+                          `Você tem datas livres para fazer essa sessão nos próximos dias? Muito obrigada!`;
+                    return `https://wa.me/${photographerWhatsAppNumber}?text=${encodeURIComponent(msg)}`;
+                });
+
+                return {
+                    lang,
+                    builder,
+                    photographerNumberFormatted,
+                    t,
+                    setLang,
+                    waDirectUrl,
+                    waBuilderUrl
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
